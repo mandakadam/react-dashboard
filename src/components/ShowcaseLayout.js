@@ -28,6 +28,7 @@ export default class AddRemoveLayout extends React.PureComponent {
           add: i === (list.length - 1)
         };
       }),*/
+      layout: [],
       items:[
           { i: 'TinyBarChart', x: 0, y: 0, w: 2, h: 2, },
           { i: 'StraightAnglePieChart', x: 0, y: 0, w: 2, h: 2, }
@@ -37,6 +38,8 @@ export default class AddRemoveLayout extends React.PureComponent {
 
     this.onAddItem = this.onAddItem.bind(this);
     this.onBreakpointChange = this.onBreakpointChange.bind(this);
+    this.onLayoutChange = this.onLayoutChange.bind(this);
+
   }
 
   createElement(el) {
@@ -100,11 +103,20 @@ export default class AddRemoveLayout extends React.PureComponent {
     });
   }
 
+
   onLayoutChange(layout) {
-    this.props.onLayoutChange(layout);
     this.setState({ layout: layout });
   }
 
+  stringifyLayout() {
+    return this.state.layout.map(function(l) {
+      return (
+        <div className="layoutItem" key={l.i}>
+          <b>{l.i}</b>: [{l.x}, {l.y}, {l.w}, {l.h}]
+        </div>
+      );
+    });
+  }
   onRemoveItem(i) {
     console.log("removing", i);
     this.setState({ items: _.reject(this.state.items, { i: i }) });
@@ -113,6 +125,11 @@ export default class AddRemoveLayout extends React.PureComponent {
   render() {
     return (
       <div>
+        <div className="layoutJSON">
+          Displayed as <code>[x, y, w, h]</code>:
+          <div className="columns">{this.stringifyLayout()}</div>
+        </div>
+
         <button onClick={this.onAddItem}>Add Item</button>
         <ResponsiveReactGridLayout
           onLayoutChange={this.onLayoutChange}
