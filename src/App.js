@@ -1,60 +1,40 @@
-import './App.scss';
-import TwoLevelPieChart from './components/BarChart/SimpleRadialBarChart'
-import SimpleBarChart from './components/BarChart/SimpleBarChart'
-import TinyBarChart from './components/BarChart/TinyBarChart'
-import TinyLineChart from './components/LineChart/TinyLineChart'
-import PieChartWithPaddingAngle from './components/PieChart/PieChartWithPaddingAngle'
+import React from "react";
+import ReactDOM from "react-dom";
+import ShowcaseLayout from "./components/ShowcaseLayout";
+import "./assets/css/style.scss";
 
-import CustomActiveShapePieChart from './components/PieChart/CustomActiveShapePieChart'
-import StraightAnglePieChart from './components/PieChart/StraightAnglePieChart'
-import PieChartWithCustomizedLabel from './components/PieChart/PieChartWithCustomizedLabel'
-import SimpleRadialBarChart from './components/PieChart/TwoLevelPieChart'
-import SpecifiedDomainRadarChart from './components/RadarChart/SpecifiedDomainRadarChart'
-import SameDataComposedChart from './components/ComposedChart/SameDataComposedChart'
-function App() {
-  return (
-    <section>
-      <div className="grid-layout">
-          <div className="grid-item">
-            <TinyBarChart />
-          </div>
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { layout: [] };
+    this.onLayoutChange = this.onLayoutChange.bind(this);
+  }
 
-          <div className="grid-item">
-            <StraightAnglePieChart />
-          </div>
-          <div className="grid-item">
-            <TinyLineChart />
-          </div>
-          <div className="grid-item">
-            <PieChartWithPaddingAngle />
-          </div>
+  onLayoutChange(layout) {
+    this.setState({ layout: layout });
+  }
+
+  stringifyLayout() {
+    return this.state.layout.map(function(l) {
+      return (
+        <div className="layoutItem" key={l.i}>
+          <b>{l.i}</b>: [{l.x}, {l.y}, {l.w}, {l.h}]
+        </div>
+      );
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <div className="layoutJSON">
+          Displayed as <code>[x, y, w, h]</code>:
+          <div className="columns">{this.stringifyLayout()}</div>
+        </div>
+        <ShowcaseLayout onLayoutChange={this.onLayoutChange} />
       </div>
-      <div className="grid-layout">
-          <div className="grid-item span-2 span-row-2">
-            <SameDataComposedChart />
-          </div>
-          <div className="grid-item span-2 span-row-2">
-            <TwoLevelPieChart />
-          </div>
-          <div className="grid-item span-2 span-row-2">
-            <SimpleBarChart />
-          </div>
-        
-          <div className="grid-item span-row-2">
-            <SpecifiedDomainRadarChart />
-          </div>
-          <div className="grid-item span-row-2">
-            <CustomActiveShapePieChart />
-          </div>
-          <div className="grid-item span-2 span-row-2">
-            <SimpleRadialBarChart />
-          </div>
-          <div className="grid-item span-2 span-row-2">
-            <PieChartWithCustomizedLabel />
-          </div>
-      </div>
-    </section>
-  );
+    );
+  }
 }
-
 export default App;
+
